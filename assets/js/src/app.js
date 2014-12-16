@@ -23,6 +23,13 @@ $(document).ready(function(){
 		$("#blockinfo").fadeOut(250);
 		hasActiveGrid = false;
 	});
+	$("#blockinfo").on("click", function(e){
+		e.preventDefault();
+		$(".grid").removeClass("top-grid-active bottom-grid-active side-grid-active");
+		$("#blockout").fadeOut(250);
+		$("#blockinfo").fadeOut(250);
+		hasActiveGrid = false;
+	});
 
 	$(".block").hover(function(){
 		if ( hasActiveGrid === true ) {
