@@ -1,3 +1,5 @@
+var cart = new Array;
+
 $(document).ready(function(){
 
 	var hasActiveGrid = false;
@@ -14,6 +16,18 @@ $(document).ready(function(){
 			hasActiveGrid = true;
 		}
 
+	});
+
+	$("#purchase-button").on('click', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		doCart();
+	});
+
+	$("#clear-cart").on("click", function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		clearCart();
 	});
 
 	$("#blockout").on("click", function(e){
@@ -49,15 +63,9 @@ $(document).ready(function(){
 			var number = $(this).attr("data-number");
 
 			if ( available !== "true" ) {
-				swal({
-					title: "Buy tile?",
-					text: "Do you wish to buy tile #" + number + " for $25?",
-					imageUrl: "assets/img/paypal.png",
-					showCancelButton: true,
-					confirmButtonColor: "#44cc55",
-					confirmButtonText: "Purchase now",
-					closeOnConfirm: false },
-					function(){ purchaseTile( number ); });
+				if (! $(this).hasClass("cart") ) {
+					addTileToPurchase(number, $(this));
+				}
 			} else {
 				swal("Tile has been purchased", "Sorry, the tile you selected has already been purchased", "error");
 				return;
@@ -92,8 +100,58 @@ function doBlockUnhover() {
 	return;
 }
 
-function purchaseTile(num) {
+function purchaseTile() {
 
-	$("#purchase_tile_id").val(num);
+	var tiles = '';
+	for (i=0;i<cart.length;i++) {
+		tiles = tiles + cart[i] + ",";
+	}
+
+	tiles = tiles.substring(0,(tiles.length) -1);
+
+	$("#purchase_tile_id").val(tiles);
 	$("form#purchase").submit();
+}
+
+function addTileToPurchase(number, ele) {
+
+	cart[cart.length] = number;
+	$(ele).addClass("cart");
+	updateTileCount();
+
+}
+
+function updateTileCount() {
+
+	var count = cart.length;
+	$("#tilecount").html(count);
+
+}
+
+function doCart() {
+
+	var count = cart.length;
+	if ( count === 0 ) {
+		swal("Whoops","You need to select some tiles first.", "error");
+		return;
+	}
+	var cost = 25 * count;
+
+	swal({
+		title: "Buy tiles?",
+		text: "Do you wish to buy " + count + " tiles for $" + cost + "?",
+		imageUrl: "assets/img/paypal.png",
+		showCancelButton: true,
+		confirmButtonColor: "#44cc55",
+		confirmButtonText: "Purchase now",
+		closeOnConfirm: false },
+		function(){ purchaseTile(); }
+	);
+
+}
+
+function clearCart() {
+	cart = new Array;
+	$(".cart").removeClass("cart");
+	updateTileCount();
 }

@@ -29,9 +29,10 @@
 <body>
 	<div id="blockout" class="blockout"></div>
 	<div id="blockinfo" class="blockinfo">
-		<h1>Block <span id="blocknumber">1</span></h1>
+		<p>Select the tiles that you wish to purchase.</p>
+		<p class="sa"><a href="#" id="purchase-button" class="purchase">Purchase <span id="tilecount">0</span> tiles now</a></p>
+		<p class="sa"><a href="#" id="clear-cart" class="clear-cart">Clear selection</a></p>
 	</div>
-
 	<div class="house">
 
 		<div class="text">
